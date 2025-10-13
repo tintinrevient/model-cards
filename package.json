@@ -24,5 +24,9 @@
 		"tailwindcss": "^4.1.14",
 		"typescript": "^5.9.2",
 		"vite": "^7.1.7"
+	},
+	"dependencies": {
+		"@tailwindcss/typography": "^0.5.19",
+		"marked": "^16.4.0"
 	}
 }

@@ -1,10 +1,6 @@
 ---
 name: LLaMA 2
-author: Meta
-downloads: 5.2M
 tags: [text-generation, open-source, llm]
-license: llama2
-updated: 2024-02-20
 ---
 
 # LLaMA 2

@@ -1,19 +1,29 @@
-export async function load() {
-  // Import all markdown files from a directory
-  const modelFiles = import.meta.glob('./content/*.md', { as: 'raw' });
-  
+export async function load({ fetch }) {
+  // List of markdown files (hardcoded for now, could be dynamic)
+  const modelSlugs = ['gpt4-vision', 'llama2', 'stable-diffusion-xl'];
+
   const models = await Promise.all(
-    Object.entries(modelFiles).map(async ([path, resolver]) => {
-      const content = await resolver();
-      const parsed = parseMarkdown(content);
-      return {
-        ...parsed,
-        slug: path.split('/').pop().replace('.md', '')
-      };
+    modelSlugs.map(async (slug) => {
+      try {
+        const response = await fetch(`/content/${slug}.md`);
+        if (!response.ok) {
+          console.warn(`Failed to fetch ${slug}.md`);
+          return null;
+        }
+        const content = await response.text();
+        const parsed = parseMarkdown(content);
+        return {
+          ...parsed,
+          slug
+        };
+      } catch (error) {
+        console.warn(`Error loading ${slug}.md:`, error);
+        return null;
+      }
     })
   );
-  
-  return { models };
+
+  return { models: models.filter(Boolean) };
 }
 
 function parseMarkdown(content) {

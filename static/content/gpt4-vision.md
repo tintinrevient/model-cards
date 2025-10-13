@@ -1,10 +1,6 @@
 ---
 name: GPT-4 Vision
-author: OpenAI
-downloads: 2.5M
 tags: [vision, multimodal, text-generation]
-license: proprietary
-updated: 2024-03-15
 ---
 
 # GPT-4 Vision

@@ -1,73 +1,56 @@
 <script>
+  import logo from '$lib/assets/logo.png';
+  import { marked } from 'marked';
+  import { goto } from '$app/navigation';
+
   export let data;
   $: models = data.models;
+
+  function navigateToModel(slug) {
+    goto(`/model/${slug}`);
+  }
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-  <!-- Header -->
-  <div class="bg-white border-b border-slate-200 shadow-sm">
-    <div class="max-w-7xl mx-auto px-6 py-8">
-      <h1 class="text-4xl font-bold text-slate-900 mb-2">Models</h1>
-      <p class="text-slate-600">Discover and explore machine learning models</p>
+<header class="sticky top-0 border-b border-gray-100 bg-white z-30">
+  <div class="flex space-x-10 items-center h-16 mx-4 xl:max-w-6xl xl:mx-auto">
+    <div class="cursor-pointer w-10">
+      <img src={logo} alt="proteingym-logo">
+    </div>
+    <div class="relative">
+      <div class="absolute top-2 left-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+        </svg>
+      </div>
+      <input class="pl-8 rounded-md border border-gray-100 h-9 pr-8 focus:shadow-xl focus:outline-none focus:ring-1 focus:ring-gray-100 focus:border-gray-100" type="text" placeholder="Search models...">
     </div>
   </div>
+</header>
 
-  <!-- Models Grid -->
-  <div class="max-w-7xl mx-auto px-6 py-8">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {#each models as model}
-        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden border border-slate-200">
-          <!-- Card Header -->
-          <div class="p-6 border-b border-slate-100">
-            <h2 class="text-xl font-bold text-slate-900 mb-1">
-              {model.frontmatter.name}
-            </h2>
-            <p class="text-sm text-slate-500">
-              by {model.frontmatter.author}
-            </p>
+<main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6 max-w-7xl mx-auto">
+  {#each models as model}
+    <div
+      class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 h-80 flex flex-col cursor-pointer"
+      on:click={() => navigateToModel(model.slug)}
+      on:keydown={(e) => e.key === 'Enter' && navigateToModel(model.slug)}
+      role="button"
+      tabindex="0"
+    >
+      <div class="mb-4">
+        <h2 class="text-xl font-semibold text-gray-900 mb-2">{model.frontmatter.name}</h2>
+        {#if model.frontmatter.tags}
+          <div class="flex flex-wrap gap-2 mb-3">
+            {#each model.frontmatter.tags as tag}
+              <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">{tag}</span>
+            {/each}
           </div>
-
-          <!-- Card Body -->
-          <div class="p-6">
-            <!-- Tags -->
-            <div class="flex flex-wrap gap-2 mb-4">
-              {#each model.frontmatter.tags as tag}
-                <span class="px-2.5 py-1 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">
-                  {tag}
-                </span>
-              {/each}
-            </div>
-
-            <!-- Description -->
-            <p class="text-slate-600 text-sm line-clamp-3 mb-4">
-              {model.content.split('\n').find(line => line.trim() && !line.startsWith('#'))}
-            </p>
-
-            <!-- Stats -->
-            <div class="flex items-center justify-between text-xs text-slate-500 pt-4 border-t border-slate-100">
-              <div class="flex items-center gap-1">
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                </svg>
-                {model.frontmatter.downloads}
-              </div>
-              <span class="px-2 py-1 bg-slate-100 rounded text-slate-600">
-                {model.frontmatter.license}
-              </span>
-            </div>
-          </div>
+        {/if}
+      </div>
+      <div class="prose prose-sm max-w-none text-gray-600 overflow-hidden flex-1">
+        <div class="line-clamp-6">
+          {@html marked(model.content)}
         </div>
-      {/each}
+      </div>
     </div>
-  </div>
-</div>
-
-<style>
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-</style>
+  {/each}
+</main>
