@@ -2,17 +2,19 @@
   import logo from '$lib/assets/logo.png';
   import { marked } from 'marked';
   import { goto } from '$app/navigation';
+  import { base } from '$app/paths';
 
   export let data;
   $: models = data.models;
+  $: num_models = models.length
 
   function navigateToModel(slug) {
-    goto(`/model/${slug}`);
+    goto(`${base}/${slug}`);
   }
 </script>
 
 <header class="sticky top-0 border-b border-gray-100 bg-white z-30">
-  <div class="flex space-x-10 items-center h-16 mx-4 xl:max-w-6xl xl:mx-auto">
+  <div class="flex space-x-10 items-center h-16 px-6 max-w-7xl mx-auto">
     <div class="cursor-pointer w-10">
       <img src={logo} alt="proteingym-logo">
     </div>
@@ -22,7 +24,7 @@
           <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
         </svg>
       </div>
-      <input class="pl-8 rounded-md border border-gray-100 h-9 pr-8 focus:shadow-xl focus:outline-none focus:ring-1 focus:ring-gray-100 focus:border-gray-100" type="text" placeholder="Search models...">
+      <input class="px-8 rounded-md border border-gray-100 h-9 w-80 focus:shadow-xl focus:outline-none focus:ring-1 focus:ring-gray-100 focus:border-gray-100" type="text" placeholder="Search models...">
     </div>
   </div>
 </header>
@@ -46,7 +48,7 @@
           </div>
         {/if}
       </div>
-      <div class="prose prose-sm max-w-none text-gray-600 overflow-hidden flex-1">
+      <div class="prose prose-sm text-gray-600 overflow-hidden">
         <div class="line-clamp-6">
           {@html marked(model.content)}
         </div>

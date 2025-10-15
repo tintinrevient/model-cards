@@ -1,6 +1,7 @@
 <script>
   import { goto } from '$app/navigation';
   import { marked } from 'marked';
+  import { base } from '$app/paths';
   export let data;
   $: model = data.model;
 </script>
@@ -9,7 +10,7 @@
   <header class="bg-white border-b border-gray-200 sticky top-0 z-10">
     <div class="max-w-4xl mx-auto px-6 py-4">
       <button
-        on:click={() => goto('/')}
+        on:click={() => goto(`${base}/`)}
         class="text-blue-600 hover:text-blue-800 mb-4 inline-flex items-center"
       >
         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
