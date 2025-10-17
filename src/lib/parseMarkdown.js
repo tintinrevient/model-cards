@@ -1,12 +1,17 @@
 export function parseMarkdown(content) {
   const frontmatterRegex = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/;
-  const match = content.match(frontmatterRegex);
+  const contentMatch = content.match(frontmatterRegex);
 
-  if (!match) return null;
+  if (!contentMatch) return null;
 
   const frontmatter = {};
-  const yamlContent = match[1];
-  const markdownContent = match[2];
+  const yamlContent = contentMatch[1];
+  const markdownContent = contentMatch[2];
+
+  const firstParagraphRegex = /^(?:#+[^\n]*\n+|\s)*(.*?)(?=\n\n|$)/s;
+  const firstParagraphMatch = markdownContent.match(firstParagraphRegex)
+
+  const firstParagraph = firstParagraphMatch[1]
 
   yamlContent.split('\n').forEach(line => {
     const [key, ...valueParts] = line.split(':');
@@ -19,5 +24,7 @@ export function parseMarkdown(content) {
     }
   });
 
-  return { frontmatter, content: markdownContent };
+
+
+  return { frontmatter, overview: firstParagraph, content: markdownContent };
 }
