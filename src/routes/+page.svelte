@@ -4,7 +4,7 @@
   import logo from "$lib/assets/logo.png";
   import { modelsStore } from "$lib/stores/models";
   import { marked } from "marked";
-  const modelsPerPage = 12;
+  const modelsPerPage = 6;
   let currentPage = $state(1);
   let searchQuery = $state("");
   const models = $derived($modelsStore);
