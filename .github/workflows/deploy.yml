@@ -41,6 +41,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          npx gh-pages -d build -t
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          npx gh-pages -d build -t true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
